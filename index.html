@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Makabeez · Break-test reviews for incentive programs, contests and agent payment rails</title>
+<meta name="description" content="I attack points programs, trading competitions, airdrops and agent payment rails the way a farmer would, before launch. Fixed price, every finding reproducible.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Your incentive program will get farmed. I'll show you how before launch.">
+<meta property="og:description" content="Break-test reviews for points programs, trading contests, airdrops and agent payment rails. Fixed price. Every finding reproducible.">
+<meta property="og:image" content="https://makabeez.vercel.app/api/og">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@GeiserJoe2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Makabeez home">
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect x="2" y="2" width="24" height="24" rx="4" fill="none" stroke="#E8ECF4" stroke-width="2"/><path d="M7 19 L12 12 L16 16 L21 8" fill="none" stroke="#FFB020" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <b>Makabeez</b><span>break-test reviews</span>
+    </a>
+    <nav class="links" aria-label="Main">
+      <a href="#cases">Case files</a>
+      <a href="/sample-report">Sample report</a>
+      <a href="#pricing">Pricing</a>
+      <a class="btn btn-amber" href="#contact">Get a quote</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<section class="hero" style="padding-top:88px">
+  <div class="wrap">
+    <div class="hero-copy">
+      <p class="eyebrow">Points · Trading contests · Airdrops · Agent payment rails</p>
+      <h1>Your incentive program will get farmed. <em>I'll show you how before launch.</em></h1>
+      <p class="lead">I attack your rules the way a farmer would: replay your real data, measure what leaks, and hand you the fix with a test. Former prop trader. Fixed price. Every finding comes with a way to reproduce it.</p>
+      <div class="cta">
+        <a class="btn btn-amber" href="#contact">Get a fixed quote in 24h</a>
+        <a class="btn btn-ghost" href="/sample-report">Read a sample report →</a>
+      </div>
+    </div>
+    <div class="terminal" role="img" aria-label="Abridged replay log: 7,606,301 trades replayed, 24 of 25 official scores matched, a critical fee waiver found in 772 of 772 top-25 fills, and the fix verified with passing tests.">
+      <div class="term-bar"><i></i><i></i><i></i><span>close-1 · replay log (abridged)</span></div>
+      <div class="term-body" aria-hidden="true">
+        <p class="c">python analysis/replay_archive.py</p>
+        <p class="dim">replaying 2,556 sweeps · 7,606,301 trades</p>
+        <p class="ok">✓ 24/25 official scores matched to 0.0001</p>
+        <p class="crit">✗ CRITICAL  fee waiver via a second key</p>
+        <p class="dim">  772/772 top-25 fills on the fee-free side</p>
+        <p class="dim">  452,949,720 POLF of fees moved to other keys</p>
+        <p class="c">fee_rule = clawback_plus</p>
+        <p class="ok">✓ leak closed · fold stays zero-sum · tests pass</p>
+        <p class="amb">report written <span class="cursor"></span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="trust" role="note" aria-label="Track record">
+  <div class="wrap">
+    <span>Fix shipped by KeeperHub in v3.5.0</span>
+    <span>3 PRs merged into KeeperHub's CLI</span>
+    <span>Same-day fix from Flop Labs' CTO</span>
+    <span>Mining guide quote-posted by Arthur Hayes</span>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat"><b>772 / 772</b><p>fills behind a live trading contest's top 25 rode one fee loophole. The rules decided the winners, not the forecasts.</p></div>
+      <div class="stat"><b>Paid twice</b><p>An execution layer reported real mainnet payments as "failed". Any agent trusting it would pay again. Fixed in production 3 days after my report.</p></div>
+      <div class="stat"><b>207 → 87</b><p>A contest leaderboard showed its leader at 207.76. Scored at the price that actually paid out, about 87.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="what">
+  <div class="wrap">
+    <h2>What I break</h2>
+    <p class="sub">A code audit checks that your contract does what you wrote. I check whether what you wrote can be gamed, and what it costs you.</p>
+    <div class="grid">
+      <div class="card"><p class="num">01</p><h3>Points and airdrops</h3><p>Who earns the most with the least real use? I build the cheapest farming strategy against your formula and put a price on it.</p></div>
+      <div class="card"><p class="num">02</p><h3>Trading contests and leaderboards</h3><p>Fee rules, marks, settlement prices, wash trades between keys one person owns. I re-score your board from the raw trades.</p></div>
+      <div class="card"><p class="num">03</p><h3>Agent execution and payments</h3><p>What does your agent do when the API says failed and the chain says done? I run real money paths and check each one on-chain.</p></div>
+      <div class="card"><p class="num">04</p><h3>Admin keys and governance</h3><p>Who can upgrade, pause or drain you, with how many signers and how much delay. Read from the chain, not from your docs.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="deliverable">
+  <div class="wrap">
+    <h2>What you get</h2>
+    <p class="sub">A ranked report. Every finding looks like this, with a way to reproduce it and a fix you can merge. <a href="/sample-report">Read a full sample report</a>.</p>
+    <article class="finding">
+      <div class="finding-head">
+        <span class="sev crit">CRITICAL</span>
+        <span class="id">CC-01</span>
+        <h3>The fee waiver lets one owner trade free through a second key</h3>
+      </div>
+      <dl>
+        <div><dt>Where</dt><dd>Fee rule: each side pays <code>max(1%, discount)</code>. A side trading 1% or more better than the close pays the gap back instead of the fee, and the key on the other side pays the 1%.</dd></div>
+        <div><dt>Evidence</dt><dd>772 of the 772 fills behind the final top 25 were on the fee-free side. 452,949,720 POLF of fees landed on other keys. Paying the fee, even perfect foresight tops out at +589; the winner scored +1,576.92.</dd></div>
+        <div><dt>Reproduce</dt><dd>Run <code>analysis/replay_archive.py</code> against the public archive. It reproduces 24 of the 25 official final scores to 0.0001 before it measures anything.</dd></div>
+        <div><dt>Fix</dt><dd>Charge the fee on top of the gap: <code>fee = 1% + max(0, discount)</code>. Shipped as a patch with tests; the fold stays zero-sum.</dd></div>
+      </dl>
+    </article>
+  </div>
+</section>
+
+<section id="cases">
+  <div class="wrap">
+    <h2>Case files</h2>
+    <p class="sub">All public, all reproducible from the linked code.</p>
+    <div class="grid" style="gap:24px">
+
+      <article class="case">
+        <p class="tag">TRADING CONTEST · FLOP LABS CLOSE-1</p>
+        <h3>The fee rule decided the winners</h3>
+        <p>I replayed all 7,606,301 public trades with the contest's own account logic and matched 24 of the 25 official final scores to 0.0001. Two problems came out of the data.</p>
+        <ul>
+          <li>A fee waiver let owners trade free through a second key: 772 of 772 top-25 fills used it</li>
+          <li>The official live board ranked everyone at a price the rules say "sets nothing". At one point it showed its leader at 207.76; at the payout price, about 87</li>
+        </ul>
+        <p>I shipped an independent board that scores at the real price and checks every signature, and a fee-rule fix with tests.</p>
+        <a class="more" href="https://github.com/Makabeez/close-call-board">Replay, board and analysis →</a>
+      </article>
+
+      <article class="case">
+        <p class="tag">EXECUTION LAYER · KEEPERHUB</p>
+        <h3>"Failed" meant paid. Twice.</h3>
+        <p>My liquidation-defense agent on Base mainnet got "failed" back for two Aave repays that had landed. I proved both transfers to the wei from allowance arithmetic and filed issue #2374.</p>
+        <ul>
+          <li>Accepted, confirmed and handled as an incident</li>
+          <li>The root cause hit every sponsored EVM write, not just Aave</li>
+          <li>Fixed in production in v3.5.0, three days later</li>
+        </ul>
+        <blockquote>"Proving the transfer to the wei without a receipt lookup is what made this diagnosable from the outside."<cite>KeeperHub maintainer, issue #2374</cite></blockquote>
+        <a class="more" href="https://github.com/KeeperHub/keeperhub/issues/2374">Read issue #2374 →</a>
+      </article>
+
+      <article class="case">
+        <p class="tag">REPUTATION · AGENT WORK ROOM</p>
+        <h3>A third of the reviews were pasted</h3>
+        <p>In Technocore's credence room, every vouch is supposed to be an independent re-run of someone's work. I scored the room's full public history.</p>
+        <ul>
+          <li>15 keys posted near-identical vouches across unrelated tasks: 527 vouches, a third of the room at the time</li>
+          <li>44% of vouches shared under 5% of their terms with the task they vouched for</li>
+          <li>It flags form, not truth, and the report says so first</li>
+        </ul>
+        <a class="more" href="https://github.com/Makabeez/credence-score">credence-score on GitHub →</a>
+      </article>
+
+      <article class="case">
+        <p class="tag">GOVERNANCE · SOLANA LENDING</p>
+        <h3>Who can actually upgrade the program</h3>
+        <p>I resolved the real upgrade authority behind four large Solana lending protocols on-chain, through their Squads multisig accounts, and scored each setup.</p>
+        <ul>
+          <li>Signer thresholds ranged from 3-of-6 to 7-of-17</li>
+          <li>Timelocks ranged from 24 hours to none</li>
+          <li>One ran on a single key with no timelock</li>
+        </ul>
+        <p>It now runs as a live monitor that alerts when an authority, threshold or timelock changes.</p>
+        <a class="more" href="https://github.com/Makabeez/sentinel-defi">Sentinel on GitHub →</a>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <h2>Pricing</h2>
+    <p class="sub">Fixed prices, agreed before I start. Paid in USDC: half to start, half after the re-check.</p>
+    <div class="grid" style="gap:24px;align-items:stretch">
+      <div class="tier">
+        <div><h3>Teardown</h3><p class="for">One program, contest or integration</p></div>
+        <p class="price"><b>$1,500</b><span> · 3 working days</span></p>
+        <ul>
+          <li>Rules, docs, API or SDK and contracts reviewed read-only</li>
+          <li>Findings ranked by severity, each with steps to reproduce</li>
+          <li>30-minute walkthrough call</li>
+          <li>One re-check after you fix</li>
+        </ul>
+        <a class="btn btn-ghost" href="#contact">Book a Teardown</a>
+      </div>
+      <div class="tier feat">
+        <div><p class="badge">BEST BEFORE A LAUNCH</p><h3>Break Test</h3><p class="for">Everything in Teardown, and I build the farmer</p></div>
+        <p class="price"><b>$4,500</b><span> · 7–10 days</span></p>
+        <ul>
+          <li>Your formula replayed or simulated against real or synthetic flow</li>
+          <li>Who wins, how cheaply and how much leaks, measured</li>
+          <li>Fixes delivered as patches with tests</li>
+          <li>Re-run after the fix to show the leak is closed</li>
+        </ul>
+        <a class="btn btn-amber" href="#contact">Book a Break Test</a>
+      </div>
+      <div class="tier">
+        <div><h3>Launch Watch</h3><p class="for">While your program is live</p></div>
+        <p class="price"><b>$2,000</b><span> / month · 2-month minimum</span></p>
+        <ul>
+          <li>Independent re-scoring of your live leaderboard or points</li>
+          <li>Farm and sybil cluster flags</li>
+          <li>Alerts on admin key, threshold and timelock changes</li>
+          <li>Weekly one-page note; anything critical within 24 hours</li>
+        </ul>
+        <a class="btn btn-ghost" href="#contact">Start a Watch</a>
+      </div>
+    </div>
+    <div class="founding">
+      <p><strong style="color:var(--text)">Founding clients:</strong> the first three Teardowns are $990 if I can publish the case study once your fix has shipped.</p>
+      <a href="#contact" style="font-weight:600">Claim a founding slot →</a>
+    </div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="wrap">
+    <h2 style="margin-bottom:40px">How it works</h2>
+    <ol class="steps">
+      <li><b style="color:var(--amber)">1 · Scope</b><p>Send me the rules, docs or repo. You get a fixed price and dates within 24 hours.</p></li>
+      <li><b>2 · Start</b><p>Half up front in USDC. Read-only access only. I never need your keys.</p></li>
+      <li><b>3 · Report</b><p>Ranked findings, each with a script or steps to reproduce, then a call to go through them.</p></li>
+      <li><b>4 · Re-check</b><p>You fix, I rerun and confirm the leak is closed. Then the second half.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section>
+  <div class="wrap two">
+    <div>
+      <h2>Ground rules</h2>
+      <ul class="rules">
+        <li><strong>This is not a formal smart-contract audit.</strong> If your contracts hold serious money, you need an audit firm too, and I'll tell you so.</li>
+        <li><strong>If I find nothing serious, the report says that.</strong> No padding to justify the invoice.</li>
+        <li><strong>Every number is measured on your data,</strong> with the script to rerun it.</li>
+        <li><strong>Private by default.</strong> Nothing goes public without your written OK.</li>
+      </ul>
+    </div>
+    <div>
+      <h2>Who's doing it</h2>
+      <p>Joe (Aymen Gnaba), Geneva. Former prop trader: funding-rate basis trades, delta-neutral books, prop-firm challenges. I read a fee schedule the way someone trying to win it does.</p>
+      <p>I build on-chain agents and trading infrastructure in public, with 44+ open repos and live deployments on Base, Arc, NEAR, Solana and Monad. One of the first 100 testers of Nansen Agents.</p>
+      <p><a href="https://www.linkedin.com/in/aymen-gnaba-1033822a/">LinkedIn</a> · <a href="https://github.com/Makabeez">GitHub</a> · <a href="https://x.com/GeiserJoe2">X</a></p>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <section id="contact" class="contact" style="padding:56px 40px">
+    <h2>Launching something people will try to game?</h2>
+    <p>Send me the rules or the repo. I'll reply within 24 hours with what I'd test first and a fixed price.</p>
+    <div class="row">
+      <a class="btn btn-amber" href="https://t.me/makabeez">Telegram @makabeez</a>
+      <a class="btn btn-ghost" href="mailto:aymen.gnaba@protonmail.com?subject=Break-test%20review">aymen.gnaba@protonmail.com</a>
+      <a class="btn btn-ghost" href="https://x.com/GeiserJoe2">X @GeiserJoe2</a>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Makabeez · break-test reviews · Geneva</span>
+    <span><a href="/sample-report">Sample report</a> · <a href="https://github.com/Makabeez">GitHub</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample Teardown report · Flop Labs close-1 · Makabeez</title>
+<meta name="description" content="A sample break-test report: a full replay of 7.6M trades from Flop Labs' close-1 trading contest, with ranked findings, evidence, reproduction steps and fixes.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sample report: the fee rule decided the winners">
+<meta property="og:description" content="7,606,301 trades replayed. 772 of 772 top-25 fills rode one fee loophole. Ranked findings, evidence and fixes.">
+<meta property="og:image" content="https://makabeez.vercel.app/api/og">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@GeiserJoe2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Makabeez home">
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect x="2" y="2" width="24" height="24" rx="4" fill="none" stroke="#E8ECF4" stroke-width="2"/><path d="M7 19 L12 12 L16 16 L21 8" fill="none" stroke="#FFB020" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <b>Makabeez</b><span>break-test reviews</span>
+    </a>
+    <nav class="links" aria-label="Main">
+      <a href="/#cases">Case files</a>
+      <a href="/#pricing">Pricing</a>
+      <a class="btn btn-amber" href="/#contact">Get a quote</a>
+    </nav>
+  </div>
+</header>
+
+<main class="report">
+
+  <p class="eyebrow">Sample report · Teardown</p>
+  <h1>Flop Labs "Close Call" close-1: the fee rule decided the winners</h1>
+  <div class="meta">
+    <span>Target: close-1 trading contest (xyz:NVDA)</span>
+    <span>Data: public referee archive</span>
+    <span>Author: Joe (Makabeez)</span>
+  </div>
+
+  <div class="note"><strong>Flop Labs was not a client.</strong> This is my own public analysis of close-1, written up in the same format a paying client receives. Everything comes from the contest's public archive, and every number reruns from the linked script. In a paid engagement you'd get this before launch, privately, with a re-check after your fix.</div>
+
+  <h2>Summary</h2>
+  <p>close-1 was a trading contest on an NVDA perpetual: keys traded with each other in 5-minute sweeps, and prizes went to the best scores at the settlement price. I rebuilt every account from the public archive using the contest's own scoring code, then measured how the top of the board actually got there.</p>
+  <p>The scoring code itself held up: it reproduces the official results exactly. The rules around it did not. A fee waiver let owners trade for free by putting a second key on the other side, and every fill behind the final top 25 used it. Separately, the live leaderboard ranked players at a price that has no effect on the payout.</p>
+
+  <div class="verdict" aria-label="Findings by severity">
+    <div><b style="color:var(--crit)">1</b><span>Critical</span></div>
+    <div><b style="color:var(--high)">1</b><span>High</span></div>
+    <div><b style="color:var(--med)">1</b><span>Medium</span></div>
+    <div><b style="color:var(--info)">1</b><span>Held up</span></div>
+  </div>
+
+  <h2>Scope and method</h2>
+  <div class="tbl-box">
+    <table class="tbl">
+      <tbody>
+        <tr><th scope="row">Rules reviewed</th><td>Fee rule (rule 12), live-board mark (rule 14), settlement price (rule 7)</td></tr>
+        <tr><th scope="row">Data</th><td>Public referee archive: 2,556 sweeps, 7,606,301 settled public trades, 9,405,335 keys that traded</td></tr>
+        <tr><th scope="row">Method</th><td>Replayed every trade with the contest's own account logic (FIFO lots, short collateral, the fee rule as written) and scored every key at the settlement price S = 234.69</td></tr>
+        <tr><th scope="row">Check before measuring</th><td>Reproduced 24 of the 25 official final scores to 0.0001 POLF. The 25th key traded in private rooms, whose 499,321 trades are redacted from the archive</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Findings</h2>
+  <div class="tbl-box">
+    <table class="tbl">
+      <thead><tr><th>ID</th><th>Severity</th><th>Finding</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td class="n">CC-01</td><td><span class="sev crit">CRITICAL</span></td><td>The fee waiver lets one owner trade free through a second key</td><td>Fix written and tested</td></tr>
+        <tr><td class="n">CC-02</td><td><span class="sev high">HIGH</span></td><td>The live board ranked players at a price that doesn't pay out</td><td>Independent board shipped</td></tr>
+        <tr><td class="n">CC-03</td><td><span class="sev med">MEDIUM</span></td><td>Private rooms make some top scores impossible to verify</td><td>Recommendation</td></tr>
+        <tr><td class="n">CC-04</td><td><span class="sev info">HELD</span></td><td>The account logic reproduces the official results exactly</td><td>No action</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <article class="finding">
+    <div class="finding-head"><span class="sev crit">CRITICAL</span><span class="id">CC-01</span><h3>The fee waiver lets one owner trade free through a second key</h3></div>
+    <dl>
+      <div><dt>What</dt><dd>Each side of a trade pays <code>max(1%, discount)</code>. A side that trades 1% or more better than the sweep's close pays that gap back instead of the fee. Its entry lands exactly at the close, and the key on the other side pays the 1% and loses the discount. Keys cost nothing, so one owner can sit on both sides and route every fee to a throwaway key.</dd></div>
+      <div><dt>Evidence</dt><dd>
+        <ul style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px">
+          <li>5,154,479 trade sides, one in three, skipped the fee this way</li>
+          <li>452,949,720.47 POLF of 1% fees were paid by the key on the other side instead</li>
+          <li>2,061,542 keys traded fee-free at least once; 3,236,971 paid another key's fee at least once</li>
+          <li>772 of the 772 fills behind the final top 25 were on the fee-free side. The three winners made 31, 35 and 23 trades</li>
+        </ul>
+      </dd></div>
+      <div><dt>Impact</dt><dd>
+        <p style="margin:0 0 14px">The contest stopped measuring forecasting. On close-1's real price path, trading about 44 contracts:</p>
+        <div class="tbl-box">
+          <table class="tbl">
+            <thead><tr><th>Strategy</th><th>Paying 1% a side</th><th>Trading free</th></tr></thead>
+            <tbody>
+              <tr><td>Perfect foresight of every sweep's close</td><td class="n">+589</td><td class="n">+11,639</td></tr>
+              <tr><td>Naive momentum: long if the last 15 minutes rose</td><td class="n">−129,129</td><td class="n">+1,027</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin:14px 0 0">The winning score was +1,576.92. Paying the fee, even perfect foresight couldn't reach it. For scale, the 99th percentile of all keys that traded was +442.76.</p>
+      </dd></div>
+      <div><dt>Fix</dt><dd>
+        <p style="margin:0 0 12px">Charge the fee on top of the gap, not instead of it (<code>clawback_plus</code>):</p>
+<pre>base   = fee_rate × qty × px
+gap    = (close − px) × qty
+buyer  = base + max(gap, 0)
+seller = base + max(−gap, 0)</pre>
+        <p style="margin:12px 0 0">A trade at the close still pays 1% a side, a discount is still paid back in full, and the fold stays zero-sum (covered by a test). Every trade now costs each side at least 1%, so a throwaway key can't pay an owner's fee. The patch passes the contest's full build, verify and test suite. The upstream repo was archived on 6 October 2026, so it's published as a ready branch for the next contest.</p>
+      </dd></div>
+      <div><dt>Reproduce</dt><dd><a href="https://github.com/Makabeez/close-call-board/tree/master/analysis">analysis/ in close-call-board</a> (replay script and full results) · <a href="https://github.com/Makabeez/technocore-close-call-challenge/blob/fee-rule-clawback-plus/docs/fee-rule-clawback-plus.md">the fix, with tests</a></dd></div>
+    </dl>
+  </article>
+
+  <article class="finding">
+    <div class="finding-head"><span class="sev high">HIGH</span><span class="id">CC-02</span><h3>The live board ranked players at a price that doesn't pay out</h3></div>
+    <dl>
+      <div><dt>What</dt><dd>The official live board valued every position at the "global" mark: the average price of the contest's own settled trades. The rules say that mark "marks the live board and sets nothing". Prizes are paid at S, the last Hyperliquid <code>xyz:NVDA</code> trade before 10:00 UTC on 4 October.</dd></div>
+      <div><dt>Evidence</dt><dd>The two prices sat more than $2 apart at times, and the global mark spiked to about 214 when off-market trades settled. At sweep 381 the board showed its #1 at 207.76 POLF; at the payout price that key was worth about 87 (the second figure rests on a fitted position size). Five community boards built during the contest all ranked at the same global mark.</dd></div>
+      <div><dt>Impact</dt><dd>Players decided whether to hold, add or flip based on rankings that could be wrong by more than half. A board that misstates who is winning invites disputes when prizes are paid.</dd></div>
+      <div><dt>Fix</dt><dd>Show the settlement-price score on the official board, next to the mark-based one. I shipped an independent board that does this, checks every Ed25519 signature on the referee's posts in the browser, and tells each player the final price they need to pass #1 and #3.</dd></div>
+      <div><dt>Reproduce</dt><dd><a href="https://close-call-board.vercel.app">close-call-board.vercel.app</a> · <a href="https://github.com/Makabeez/close-call-board">source</a></dd></div>
+    </dl>
+  </article>
+
+  <article class="finding">
+    <div class="finding-head"><span class="sev med">MEDIUM</span><span class="id">CC-03</span><h3>Private rooms make some top scores impossible to verify</h3></div>
+    <dl>
+      <div><dt>What</dt><dd>Trades in private rooms are redacted from the public archive: 499,321 of them. One of the final top 25 traded there, so its score can't be rebuilt from public data. The referee only posts the top 25 by score and the top 10 positions, so keys outside those lists can't be checked either.</dd></div>
+      <div><dt>Impact</dt><dd>Anyone disputing a prize can't independently confirm the result. Here the rest of the top 25 reproduced exactly, so this is a trust gap, not a known error.</dd></div>
+      <div><dt>Fix</dt><dd>The referee already commits a SHA-256 of each sweep's full flow file in its posts. Serving those files after settlement would make every score verifiable without exposing anything during play.</dd></div>
+    </dl>
+  </article>
+
+  <article class="finding">
+    <div class="finding-head"><span class="sev info">HELD</span><span class="id">CC-04</span><h3>The account logic reproduces the official results exactly</h3></div>
+    <dl>
+      <div><dt>What</dt><dd>Replaying the archive with the contest's scoring code gave the same final score as the referee for 24 of 25 top keys, to 0.0001 POLF. The 25th is explained by CC-03.</dd></div>
+      <div><dt>Meaning</dt><dd>The math is sound; the problems are in the incentives around it. That's the usual pattern, and it's why a code audit alone wouldn't have caught CC-01.</dd></div>
+    </dl>
+  </article>
+
+  <h2>What a client gets on top</h2>
+  <ul>
+    <li>This report before launch, privately, with the replay or simulation scripts</li>
+    <li>A 30-minute call to go through the findings</li>
+    <li>A re-run after your fix, confirming each leak is closed</li>
+  </ul>
+
+  <div class="contact" style="margin-top:56px">
+    <h2>Want this for your launch?</h2>
+    <p>Send me the rules or the repo. I'll reply within 24 hours with what I'd test first and a fixed price.</p>
+    <div class="row">
+      <a class="btn btn-amber" href="https://t.me/makabeez">Telegram @makabeez</a>
+      <a class="btn btn-ghost" href="mailto:aymen.gnaba@protonmail.com?subject=Break-test%20review">aymen.gnaba@protonmail.com</a>
+      <a class="btn btn-ghost" href="/#pricing">See pricing</a>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Makabeez · break-test reviews · Geneva</span>
+    <span><a href="/">Home</a> · <a href="https://github.com/Makabeez">GitHub</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
