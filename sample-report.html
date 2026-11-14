@@ -6,6 +6,8 @@
 <title>Sample Teardown report · Flop Labs close-1 · Makabeez</title>
 <meta name="description" content="A sample break-test report: a full replay of 7.6M trades from Flop Labs' close-1 trading contest, with ranked findings, evidence, reproduction steps and fixes.">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://makabeez.com/sample-report">
+<meta property="og:url" content="https://makabeez.com/sample-report">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Sample report: the fee rule decided the winners">
 <meta property="og:description" content="7,606,301 trades replayed. 772 of 772 top-25 fills rode one fee loophole. Ranked findings, evidence and fixes.">
@@ -124,7 +126,7 @@ seller = base + max(−gap, 0)</pre>
       <div><dt>What</dt><dd>The official live board valued every position at the "global" mark: the average price of the contest's own settled trades. The rules say that mark "marks the live board and sets nothing". Prizes are paid at S, the last Hyperliquid <code>xyz:NVDA</code> trade before 10:00 UTC on 4 October.</dd></div>
       <div><dt>Evidence</dt><dd>The two prices sat more than $2 apart at times, and the global mark spiked to about 214 when off-market trades settled. At sweep 381 the board showed its #1 at 207.76 POLF; at the payout price that key was worth about 87 (the second figure rests on a fitted position size). Five community boards built during the contest all ranked at the same global mark.</dd></div>
       <div><dt>Impact</dt><dd>Players decided whether to hold, add or flip based on rankings that could be wrong by more than half. A board that misstates who is winning invites disputes when prizes are paid.</dd></div>
-      <div><dt>Fix</dt><dd>Show the settlement-price score on the official board, next to the mark-based one. I shipped an independent board that does this, checks every Ed25519 signature on the referee's posts in the browser, and tells each player the final price they need to pass #1 and #3.</dd></div>
+      <div><dt>Fix</dt><dd>Show the settlement-price score on the official board, next to the mark-based one. I built and published an independent board that does this, checks every Ed25519 signature on the referee's posts in the browser, and tells each player the final price they need to pass #1 and #3.</dd></div>
       <div><dt>Reproduce</dt><dd><a href="https://close-call-board.vercel.app">close-call-board.vercel.app</a> · <a href="https://github.com/Makabeez/close-call-board">source</a></dd></div>
     </dl>
   </article>

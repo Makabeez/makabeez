@@ -178,3 +178,25 @@ pre{margin:0;background:#0A0C12;border:1px solid var(--line);border-radius:10px;
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 .report .contact h2{margin:0}
+
+/* plain-language line, stages, quote form */
+.hero .plain{font-size:21px;line-height:1.5;color:var(--text);font-weight:500;max-width:680px;margin:26px 0 0}
+.hero .plain + .lead{margin-top:14px;font-size:18px;color:var(--soft)}
+.stage{display:block;margin-top:8px;font-family:var(--mono);font-size:13px;color:var(--muted)}
+.stages{display:flex;flex-wrap:wrap;gap:8px;margin:0}
+.stages span{font-family:var(--mono);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line-2);color:var(--soft)}
+.stages span.done{border-color:rgba(143,217,168,.45);color:var(--info)}
+.stages span.done::before{content:"✓ "}
+.stages span.no{border-style:dashed;color:var(--muted)}
+.quote{width:100%;display:flex;flex-wrap:wrap;gap:16px 20px;margin-top:8px}
+.quote .f{flex:1 1 260px;min-width:0;display:flex;flex-direction:column;gap:6px}
+.quote .f.wide{flex-basis:100%}
+.quote label{font-size:14px;color:var(--soft);font-weight:500}
+.quote .opt{color:var(--muted);font-weight:400}
+.quote input,.quote select,.quote textarea{font:inherit;font-size:16px;color:var(--text);background:#0A0C12;border:1px solid var(--line-2);border-radius:9px;padding:12px 14px;min-height:48px;width:100%}
+.quote textarea{resize:vertical}
+.quote input:focus,.quote select:focus,.quote textarea:focus{outline:2px solid var(--amber);outline-offset:1px;border-color:var(--amber)}
+.quote input[type=date]{color-scheme:dark}
+.quote .actions{flex-direction:row;flex-wrap:wrap;align-items:center;gap:12px 18px}
+.quote .hint{margin:0;font-size:14px;color:var(--muted);max-width:none}
+.contact .or{font-size:15px;color:var(--muted);margin-top:8px}
