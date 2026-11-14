@@ -231,6 +231,18 @@
       <p><strong style="color:var(--text)">Founding clients:</strong> the first three Teardowns are $990 if I can publish the case study once your fix has shipped.</p>
       <a href="#contact" style="font-weight:600">Claim a founding slot →</a>
     </div>
+    <div class="example">
+      <p class="badge">EXAMPLE · ILLUSTRATIVE</p>
+      <h3>A $100,000 points campaign</h3>
+      <p>A project sets aside $100,000 in rewards for a six-week points season. Before launch, a Break Test answers one question: how much of that budget can someone take without being a real user?</p>
+      <ol>
+        <li><strong>A demonstration you can rerun:</strong> the cheapest farming strategy, run against your actual formula.</li>
+        <li><strong>An estimate of the exposure:</strong> how much of the $100,000 that strategy could capture.</li>
+        <li><strong>A proposed fix:</strong> a rule change or a patch.</li>
+        <li><strong>A verification test:</strong> the same strategy rerun after the fix, showing the leak is closed.</li>
+      </ol>
+      <p class="fine">Illustrative only: what's at stake depends on your rules and your users. The <a href="/sample-report">sample report</a> shows a real case.</p>
+    </div>
   </div>
 </section>
 
@@ -259,7 +271,7 @@
     </div>
     <div>
       <h2>Who's doing it</h2>
-      <p>Joe (Aymen Gnaba), Geneva. Former prop trader: funding-rate basis trades, delta-neutral books, prop-firm challenges. I read a fee schedule the way someone trying to win it does.</p>
+      <p>I'm Aymen Gnaba, known online as Joe (Makabeez on GitHub), based in Geneva. Former prop trader: funding-rate basis trades, delta-neutral books, prop-firm challenges. I read a fee schedule the way someone trying to win it does.</p>
       <p>I build on-chain agents and trading infrastructure in public, with 44+ open repos and live deployments on Base, Arc, NEAR, Solana and Monad. One of the first 100 testers of Nansen Agents.</p>
       <p><a href="https://www.linkedin.com/in/aymen-gnaba-1033822a/">LinkedIn</a> · <a href="https://github.com/Makabeez">GitHub</a> · <a href="https://x.com/GeiserJoe2">X</a></p>
     </div>
@@ -280,8 +292,11 @@
       <div class="f"><label for="q-date">Expected launch date</label><input id="q-date" name="date" type="date"></div>
       <div class="f"><label for="q-contact">Best way to reach you (Telegram, X or email)</label><input id="q-contact" name="contact" required></div>
       <div class="f wide"><label for="q-notes">Anything else? <span class="opt">(optional)</span></label><textarea id="q-notes" name="notes" rows="3"></textarea></div>
-      <div class="f wide actions"><button class="btn btn-amber" type="submit">Request a quote</button><p class="hint" id="q-hint" role="status">Opens your email app with everything filled in. Nothing is stored on this site.</p></div>
+      <div class="hp" aria-hidden="true"><label for="q-web">Leave this empty</label><input id="q-web" name="website2" tabindex="-1" autocomplete="off"></div>
+      <div class="f wide actions"><button class="btn btn-amber" type="submit" id="q-send">Request a quote</button><p class="hint" id="q-hint" role="status">Goes straight to my phone. I reply within 24 hours.</p></div>
     </form>
+    <div class="q-msg ok" id="q-done" hidden role="status" tabindex="-1"><strong>Got it, thanks.</strong> Your request reached me. I'll reply within 24 hours at the contact you gave.</div>
+    <div class="q-msg fail" id="q-fail" hidden role="alert"><strong>That didn't go through.</strong> Your details are still in the form. Send them <a id="q-mail" href="mailto:hello@makabeez.com">by email</a> or message <a href="https://t.me/makabeez">@makabeez on Telegram</a>.</div>
     <p class="or">Or reach me directly:</p>
     <div class="row">
       <a class="btn btn-amber" href="https://t.me/makabeez">Telegram @makabeez</a>
@@ -304,16 +319,14 @@
 (function () {
   var f = document.getElementById('quote');
   if (!f) return;
-  f.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var v = function (n) { return (f.elements[n].value || '').trim(); };
-    var hint = document.getElementById('q-hint');
-    if (!v('project') || !v('contact')) {
-      hint.textContent = 'Please add the project name and how to reach you.';
-      (v('project') ? f.elements.contact : f.elements.project).focus();
-      return;
-    }
-    var body = [
+  var loaded = Date.now();
+  var hint = document.getElementById('q-hint');
+  var send = document.getElementById('q-send');
+  var done = document.getElementById('q-done');
+  var fail = document.getElementById('q-fail');
+  var v = function (n) { return (f.elements[n].value || '').trim(); };
+  function mailBody() {
+    return [
       'Project: ' + v('project'),
       'Link: ' + (v('link') || '-'),
       'Launching: ' + v('type'),
@@ -322,9 +335,40 @@
       '',
       v('notes')
     ].join('\n');
-    window.location.href = 'mailto:hello@makabeez.com?subject=' +
-      encodeURIComponent('Quote request: ' + v('project')) + '&body=' + encodeURIComponent(body);
-    hint.textContent = 'Your email app should open now. If it doesn\'t, message @makabeez on Telegram.';
+  }
+  function showFail() {
+    document.getElementById('q-mail').href = 'mailto:hello@makabeez.com?subject=' +
+      encodeURIComponent('Quote request: ' + v('project')) + '&body=' + encodeURIComponent(mailBody());
+    fail.hidden = false;
+    send.disabled = false;
+    send.textContent = 'Request a quote';
+  }
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    fail.hidden = true;
+    if (!v('project') || !v('contact')) {
+      hint.textContent = 'Please add the project name and how to reach you.';
+      (v('project') ? f.elements.contact : f.elements.project).focus();
+      return;
+    }
+    send.disabled = true;
+    send.textContent = 'Sending…';
+    fetch('/api/quote', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        project: v('project'), link: v('link'), type: v('type'), date: v('date'),
+        contact: v('contact'), notes: v('notes'), website2: v('website2'),
+        elapsed: Date.now() - loaded
+      })
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) { return r.ok && j.ok; });
+    }).then(function (ok) {
+      if (!ok) return showFail();
+      f.hidden = true;
+      done.hidden = false;
+      done.focus();
+    }).catch(showFail);
   });
 })();
 </script>
